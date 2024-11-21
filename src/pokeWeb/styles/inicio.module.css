@@ -1,0 +1,17 @@
+.inicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alinear horizontalmente en el centro */
+    justify-content: center; /* Alinear verticalmente en el centro */
+    padding: 10px;
+    /* height: 110vh; Altura completa de la ventana para centrar verticalmente */
+    
+    h1{
+        color: #3b4cca;
+        font-size: 50px;
+        /* font-family: 'Press Start 2P', cursive;   aplicación de fuente */
+        &:hover {
+            color: #f8d030;
+        }
+    }
+}

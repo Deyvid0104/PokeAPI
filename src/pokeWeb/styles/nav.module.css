@@ -1,0 +1,9 @@
+.nav {
+  padding: 15px; /* Espaciado interno */
+
+  &:hover {
+    background-color: #f8d030; /* Color de fondo al pasar el ratón */
+    color: #3b4cca;
+    border-radius: 12%;
+  }
+}
