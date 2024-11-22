@@ -14,8 +14,8 @@ function Navegacion() {
           <Nav.Link href="/gen2">2ª Generación</Nav.Link>
           <Nav.Link href="/gen3">3ª Generación</Nav.Link>
           <NavDropdown title={<span><IoIosContact /> Contactos</span>} id="basic-nav-dropdown">
-            <NavDropdown.Item href="/contactos/domingo">Domingo</NavDropdown.Item>
-            <NavDropdown.Item href="/contactos/gines">Gines</NavDropdown.Item>
+            <NavDropdown.Item href="/contacto/domingo">Domingo</NavDropdown.Item>
+            <NavDropdown.Item href="/contacto/gines">Gines</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>
