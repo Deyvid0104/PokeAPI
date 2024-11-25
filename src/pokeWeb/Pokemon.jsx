@@ -23,7 +23,7 @@ export const Pokemon = ({ id }) => {
   if (!pokemon) return null;
 
   return (
-    <Card style={{ width: '18rem', margin: '10px' }}>
+    <Card style={{ width: '15rem', margin: '10px' }}> 
       <Card.Img variant="top" src={pokemon.img} alt={pokemon.nombre} />
       <Card.Body>
         <Card.Title className={styles.nombre}>{pokemon.nombre}</Card.Title>
