@@ -9,9 +9,38 @@ pipeline {
     }
 
     stages {
-        stage('Clonar repositorio git Autocaravaneando desde Github') {
+        stage('Clonar repositorio git PokeAPI desde Github') {
             steps {
                 git branch: 'main', url: 'https://github.com/Deyvid0104/PokeAPI.git'
+            }
+        }
+
+        stage {
+            stage('Acciones'){
+                steps {
+                    script {
+                        sh echo $K8S_SERVER
+                        sh echo $K8S_TOKEN
+                    }
+                }
+            }
+        }
+
+        stage('Configurar acceso a Kubernetes') {
+            steps { // Conexion de Jenkins a Kubernetes
+                script {
+                    sh 'kubectl config set-cluster k8s-cluster --server=${K8S_SERVER} --insecure-skip-tls-verify=true'
+                    sh 'kubectl config set-credentials jenkins --token=$K8S_TOKEN'
+                    sh 'kubectl config set-context jenkins --cluster=k8s-cluster --user=jenkins --namespace=$NAMESPACE'
+                    sh 'kubectl config use-context jenkins'
+                }
+            }
+        }
+
+        stage('Verificar kubectl 1') {
+            steps {
+                sh 'kubectl version --client'
+                sh 'kubectl get nodes'
             }
         }
             
