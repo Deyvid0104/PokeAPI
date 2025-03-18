@@ -55,6 +55,7 @@ pipeline {
                         // sh "kubectl delete deploy apireact"
                         sh "kubectl apply -f deploy/deploy.yaml"
                         sh "kubectl apply -f deploy/serviceLB.yaml"
+                        // Prueba de despliegue
                     }
             }
         }
