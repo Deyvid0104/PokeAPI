@@ -51,10 +51,10 @@ pipeline {
             steps {
                 script {
                         sh "kubectl apply -f deploy/configMap.yaml"
-                        sh "kubectl apply -f deploy/pvc.yaml"
-                        sh "kubectl delete deploy apireact"
+                        // sh "kubectl apply -f deploy/pvc.yaml"
+                        // sh "kubectl delete deploy apireact"
                         sh "kubectl apply -f deploy/deploy.yaml"
-                        sh "kubectl apply -f deploy/service.yaml"
+                        sh "kubectl apply -f deploy/serviceLB.yaml"
                     }
             }
         }
