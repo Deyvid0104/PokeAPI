@@ -5,7 +5,17 @@ metadata:
 spec:
   selector:
     app: pokeapi
-  ports:
-  - port: 80
-    targetPort: 80
   type: LoadBalancer
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 85  # Puerto expuesto en el servicio
+    targetPort: 80  # Puerto expuesto en el contenedor
+    nodePort: 31416  # Para acceder desde el exterior (en el rango 30000-32767)
+# spec:
+#   selector:
+#     app: pokeapi
+#   # ports:
+#   # - port: 80
+#   #   targetPort: 80
+#   type: LoadBalancer
