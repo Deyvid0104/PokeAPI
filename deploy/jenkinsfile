@@ -52,7 +52,7 @@ pipeline {
                 script {
                         sh "kubectl apply -f deploy/configmap.yaml"
                         // sh "kubectl apply -f deploy/pvc.yaml"
-                        sh "kubectl delete deploy pokeapi-d"
+                        // sh "kubectl delete deploy pokeapi-d"
                         sh "kubectl apply -f deploy/deploy.yaml"
                         sh "kubectl apply -f deploy/serviceLB.yaml"
                         // Prueba de despliegue
