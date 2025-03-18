@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -14,21 +15,23 @@ pipeline {
             }
         }
 
-        stage('Acciones') {  // 👈 Corrigido
-            steps {
-                script {
-                    sh "echo $K8S_SERVER"  // 👈 Agregadas comillas para evitar error de sintaxis
-                    sh "echo $K8S_TOKEN"
+        stage {
+            stage('Acciones'){
+                steps {
+                    script {
+                        sh echo $K8S_SERVER
+                        sh echo $K8S_TOKEN
+                    }
                 }
             }
         }
 
         stage('Configurar acceso a Kubernetes') {
-            steps {
+            steps { // Conexion de Jenkins a Kubernetes
                 script {
                     sh 'kubectl config set-cluster k8s-cluster --server=${K8S_SERVER} --insecure-skip-tls-verify=true'
                     sh 'kubectl config set-credentials jenkins --token=$K8S_TOKEN'
-                    sh 'kubectl config set-context jenkins --cluster=k8s-cluster --user=jenkins --namespace=$K8S_NAMESPACE'  // 👈 Variable corregida
+                    sh 'kubectl config set-context jenkins --cluster=k8s-cluster --user=jenkins --namespace=$NAMESPACE'
                     sh 'kubectl config use-context jenkins'
                 }
             }
@@ -36,8 +39,12 @@ pipeline {
 
         stage('Deploy en Kubernetes') {
             steps {
+                // sh 'kubectl apply -f deploy/namespace.yaml'
+                // sh 'kubectl apply -f deploy/configmap.yaml'
+                // sh 'kubectl apply -f deploy/pvc.yaml'
                 sh 'kubectl apply -f deploy/deploy.yaml'
                 sh 'kubectl apply -f deploy/serviceLB.yaml'
+                //
             }
         }
 
@@ -47,14 +54,15 @@ pipeline {
                 sh 'kubectl get nodes'
             }
         }
-    }
-
-    post {  // 👈 Movido fuera de "stages"
-        success {
-            echo "Despliegue completado con éxito"
-        }
-        failure {
-            echo "Error en el despliegue"
+            
+        post {
+            success {
+                echo "Despliegue completado con éxito"
+            }
+            failure {
+                echo "Error en el despliegue"
+            }
         }
     }
 }
+// Prueba
