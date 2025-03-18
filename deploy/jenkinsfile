@@ -37,6 +37,16 @@ pipeline {
             }
         }
 
+        stage('Deploy en Kubernetes') {
+            steps {
+                // sh 'kubectl apply -f deploy/namespace.yaml'
+                // sh 'kubectl apply -f deploy/configmap.yaml'
+                // sh 'kubectl apply -f deploy/pvc.yaml'
+                sh 'kubectl apply -f deploy/deploy.yaml'
+                sh 'kubectl apply -f deploy/serviceLB.yaml'
+            }
+        }
+
         stage('Verificar kubectl 1') {
             steps {
                 sh 'kubectl version --client'
