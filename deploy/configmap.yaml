@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pokeapi-env
+data:
+  CONTEXTO: /home/deyvid/hlc-docker/Caronte/pokeAPI
+  AUTOR: Deyvid14
+  TZ: Europe/Madrid
+  PROYECTO: PokeAPI
+  USUARIO: deyvid
+  PASSWD: deyvid
+  HOSTNAME: PokeAPI
+  PORT_SSH: "45679"
+  PORT_ORIGEN: "8090"
