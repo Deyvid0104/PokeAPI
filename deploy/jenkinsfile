@@ -2,54 +2,64 @@ pipeline {
     agent any
 
     environment {
-        K8S_SERVER = "https://192.168.49.2:8443"
+        K8S_SERVER = "https://192.168.49.2:8443" // IP de tu VPS
         K8S_TOKEN = credentials('k8s-token')
-        K8S_NAMESPACE = "default"
+        NAMESPACE="default"
+        // REGISTRY = "frmehu"  // Cambia     por tu usuario de Docker Hub o tu registro privado
+        // IMAGE_NAME = "react"
+        // TAG = "v1"
+        // KUBE_CONFIG = credentials('kubeconfig') // Configura una credencial en Jenkins con el Kubeconfig de tu VPS
     }
 
     stages {
-        stage('Clonar repositorio git PokeAPI desde Github') {
+        stage('Clonar repositorio git Autocaravaneando desde Github') {
             steps {
                 git branch: 'main', url: 'https://github.com/Deyvid0104/PokeAPI.git'
             }
-        }
+        }  
 
-        stage('Acciones') {  // 👈 Corrigido
-            steps {
-                script {
-                    sh "echo $K8S_SERVER"  // 👈 Agregadas comillas para evitar error de sintaxis
-                    sh "echo $K8S_TOKEN"
+        stage('Acciones'){
+            steps{
+                script{
+                    sh """
+                        echo $K8S_SERVER
+                        echo $K8S_TOKEN
+                    """
                 }
             }
         }
-
         stage('Configurar acceso a Kubernetes') {
             steps {
                 script {
-                    sh 'kubectl config set-cluster k8s-cluster --server=${K8S_SERVER} --insecure-skip-tls-verify=true'
-                    sh 'kubectl config set-credentials jenkins --token=$K8S_TOKEN'
-                    sh 'kubectl config set-context jenkins --cluster=k8s-cluster --user=jenkins --namespace=$K8S_NAMESPACE'  // 👈 Variable corregida
-                    sh 'kubectl config use-context jenkins'
+                    sh """
+                    kubectl config set-cluster k8s-cluster --server=$K8S_SERVER --insecure-skip-tls-verify=true
+                    kubectl config set-credentials jenkins --token=$K8S_TOKEN
+                    kubectl config set-context jenkins --cluster=k8s-cluster --user=jenkins --namespace=$NAMESPACE
+                    kubectl config use-context jenkins
+                    """
                 }
             }
         }
-
-        stage('Deploy en Kubernetes') {
-            steps {
-                sh 'kubectl apply -f deploy/deploy.yaml'
-                sh 'kubectl apply -f deploy/serviceLB.yaml'
-            }
-        }
-
-        stage('Verificar kubectl 1') {
+         stage('Verificar kubectl 1') {
             steps {
                 sh 'kubectl version --client'
-                sh 'kubectl get nodes'
+                // sh 'kubectl config current-context' // Verifica que está usando el contexto correcto
+                sh 'kubectl get nodes' // Confirma conexión con el clúster
+            }
+        }
+        stage('Deploy en Kubernetes') {
+            steps {
+                script {
+                        sh "kubectl apply -f deploy/configMap.yaml"
+                        sh "kubectl apply -f deploy/pvc.yaml"
+                        sh "kubectl delete deploy apireact"
+                        sh "kubectl apply -f deploy/deploy.yaml"
+                        sh "kubectl apply -f deploy/service.yaml"
+                    }
             }
         }
     }
-
-    post {  // 👈 Movido fuera de "stages"
+    post {
         success {
             echo "Despliegue completado con éxito"
         }
