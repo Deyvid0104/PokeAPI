@@ -4,7 +4,7 @@ import styles from './styles/inicio.module.css'; // Importar estilos
 function Inicio() {
     return (
       <div className={styles.inicio}>
-        <h1>Bienvenido al mundo de Pokémon Inicio</h1>
+        <h1>Bienvenido al mundo de Pokémon 2025</h1>
         <Pokemon id={Math.floor(Math.random() * 151) + 1} />
       </div>
     );
